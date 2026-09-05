@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080b0d">
+  <meta name="description" content="Stake Türkiye portal çekilişleri">
+  <title>Çekilişler | Stake Türkiye</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="announce" data-announcement></div>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="v2-logo" href="index.html"><strong>STAKE</strong><small>TÜRKİYE 🇹🇷</small></a>
+      <div class="actions">
+        <a class="btn btn-ghost" data-login href="#">Giriş Yap</a>
+        <a class="btn btn-primary" data-referral href="#">Kayıt Ol</a>
+        <a class="btn btn-member" data-member-account href="hesap.html">Portal Hesabı</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="shell page-hero">
+      <div class="crumb"><a href="index.html">Ana Sayfa</a> / Çekilişler</div>
+      <span class="eyebrow">ÖDÜLLER</span>
+      <h1 data-title>Çekilişler</h1>
+      <p data-sub>Aktif çekilişlere portal hesabınla katıl.</p>
+    </section>
+    <section class="shell section" style="padding-top:10px">
+      <div id="giveNotice" class="give-notice" hidden></div>
+      <div id="giveMount" class="give-grid"><div class="loading">Çekilişler yükleniyor…</div></div>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <div class="footer-top"><div><a class="v2-logo" href="index.html"><strong>STAKE</strong><small>TÜRKİYE 🇹🇷</small></a><p data-affiliate-note></p></div><div class="footer-links"><a href="bonus-codes.html">Bonus Kodları</a><a href="cekilisler.html">Çekilişler</a><a href="kampanyalar.html">Kampanyalar</a><a href="liderlik-tablosu.html">Liderlik</a><a href="iletisim.html">İletişim</a></div></div>
+    <div class="responsible"><b>18+</b><span>Yalnızca yasal yaş sınırının üzerindeki kullanıcılar içindir. Kampanya koşulları değişebilir.</span></div>
+    <p style="font-size:12px;margin-top:20px">© <span id="year"></span> Stake Türkiye Tanıtım</p>
+  </footer>
+
+  <script src="default-content.js"></script>
+  <script src="app.js"></script>
+  <script>
+  (() => {
+    'use strict';
+    const mount = document.getElementById('giveMount');
+    const notice = document.getElementById('giveNotice');
+    const esc = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+    const fmtDate = value => {
+      const d = new Date(value);
+      return Number.isFinite(d.getTime()) ? d.toLocaleString('tr-TR', {dateStyle:'long', timeStyle:'short'}) : '—';
+    };
+    const api = async (url, options = {}) => {
+      const response = await fetch(url, {
+        credentials: 'same-origin',
+        ...options,
+        headers: {'Content-Type':'application/json', ...(options.headers || {})}
+      });
+      let body = {};
+      try { body = await response.json(); } catch {}
+      if (!response.ok) throw new Error(body.error || 'İşlem başarısız.');
+      return body;
+    };
+    const showNotice = (text, ok = false) => {
+      notice.hidden = false;
+      notice.textContent = text;
+      notice.className = 'give-notice ' + (ok ? 'ok' : 'bad');
+      clearTimeout(showNotice._t);
+      showNotice._t = setTimeout(() => { notice.hidden = true; }, 5000);
+    };
+    const loginUrl = () => 'hesap.html?next=' + encodeURIComponent('cekilisler.html');
+
+    function render(data) {
+      const items = Array.isArray(data.items) ? data.items : [];
+      if (!items.length) {
+        mount.innerHTML = '<div class="empty">Şu anda yayınlanmış çekiliş bulunmuyor.</div>';
+        return;
+      }
+
+      mount.innerHTML = items.map(item => {
+        const endMs = new Date(item.date).getTime();
+        const expired = Number.isFinite(endMs) ? endMs <= Date.now() : true;
+        let action = '';
+        if (item.winnerDisplay) {
+          action = `<div class="give-winner"><span>KAZANAN</span><strong>${esc(item.winnerDisplay)}</strong></div>`;
+        } else if (expired) {
+          action = '<button class="btn btn-ghost btn-full" type="button" disabled>Çekiliş sona erdi</button>';
+        } else if (item.joined) {
+          action = '<button class="btn btn-primary btn-full give-joined" type="button" disabled>✓ Çekilişe Katıldın</button>';
+        } else {
+          action = `<button class="btn btn-primary btn-full give-join-btn" type="button" data-give-id="${esc(item.id)}">Çekilişe Katıl</button>
+            <form class="give-join-form" data-form-id="${esc(item.id)}" hidden>
+              <label class="give-telegram-label" for="tg-${esc(item.id)}">Telegram kullanıcı adın</label>
+              <div class="give-join-row">
+                <input class="input" id="tg-${esc(item.id)}" name="telegram" placeholder="@kullaniciadi" maxlength="33" autocomplete="off" required>
+                <button class="btn btn-primary" type="submit">Katılımı Onayla</button>
+              </div>
+              <small>Ödül teslimatı için Telegram adresin yalnızca yönetici tarafından görülebilir.</small>
+            </form>`;
+        }
+
+        return `<article class="give-card" data-card-id="${esc(item.id)}">
+          <div class="give-card-head"><span class="tag">🎁 ${esc(item.status || (expired ? 'Sona Erdi' : 'Aktif'))}</span><span class="muted">${fmtDate(item.date)}</span></div>
+          <h2>${esc(item.title)}</h2>
+          <div class="give-prize">${esc(item.prize || 'Ödül açıklanacak')}</div>
+          <p class="muted give-description">${esc(item.description || '')}</p>
+          <div class="give-stats"><span><b>${Number(item.participantCount || 0)}</b> katılımcı</span><span>Bitiş: <b>${fmtDate(item.date)}</b></span></div>
+          <div class="give-action">${action}</div>
+        </article>`;
+      }).join('');
+
+      mount.querySelectorAll('.give-join-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (!data.authenticated) {
+            location.href = loginUrl();
+            return;
+          }
+          const id = btn.dataset.giveId;
+          const form = [...mount.querySelectorAll('.give-join-form')].find(x => x.dataset.formId === id);
+          if (!form) {
+            showNotice('Katılım formu açılamadı. Sayfayı yenileyip tekrar dene.');
+            return;
+          }
+          form.hidden = !form.hidden;
+          btn.textContent = form.hidden ? 'Çekilişe Katıl' : 'Vazgeç';
+          if (!form.hidden) form.querySelector('input')?.focus();
+        });
+      });
+
+      mount.querySelectorAll('.give-join-form').forEach(form => {
+        form.addEventListener('submit', async event => {
+          event.preventDefault();
+          const id = form.dataset.formId;
+          const submit = form.querySelector('button[type="submit"]');
+          const input = form.querySelector('input[name="telegram"]');
+          const original = submit.textContent;
+          submit.disabled = true;
+          submit.textContent = 'Kaydediliyor…';
+          try {
+            await api('/api/giveaways', {method:'POST', body:JSON.stringify({giveawayId:id, telegram:input.value.trim()})});
+            showNotice('Çekilişe başarıyla katıldın ✓', true);
+            await loadGiveaways();
+          } catch (error) {
+            if (/giriş/i.test(error.message)) {
+              location.href = loginUrl();
+              return;
+            }
+            showNotice(error.message || 'Katılım sırasında hata oluştu.');
+          } finally {
+            submit.disabled = false;
+            submit.textContent = original;
+          }
+        });
+      });
+    }
+
+    async function loadGiveaways() {
+      try {
+        const data = await api('/api/giveaways');
+        render(data);
+      } catch (error) {
+        mount.innerHTML = `<div class="empty">${esc(error.message || 'Çekilişler yüklenemedi.')}</div>`;
+      }
+    }
+
+    window.addEventListener('content-ready', event => {
+      const cfg = event.detail?.giveawaysConfig || {};
+      const title = document.querySelector('[data-title]');
+      const sub = document.querySelector('[data-sub]');
+      if (title) title.textContent = cfg.title || 'Çekilişler';
+      if (sub) sub.textContent = cfg.subtitle || 'Aktif çekilişlere portal hesabınla katıl.';
+    });
+
+    loadGiveaways();
+  })();
+  </script>
+</body>
+</html>

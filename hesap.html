@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080b0d">
+  <meta name="description" content="Stake Türkiye portal üyelik hesabı.">
+  <title>Portal Hesabı | Stake Türkiye</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="announce" data-announcement>Güncel kampanyalar • Canlı leaderboard • Kıbrıs kodu</div>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <button class="hamburger-btn" id="sidebarToggleBtn" type="button" aria-label="Menüyü Aç">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <a class="v2-logo" href="index.html"><strong>STAKE</strong><small>TÜRKİYE 🇹🇷</small></a>
+
+      <div class="actions">
+        <a class="btn btn-ghost" data-login href="#">Giriş Yap</a>
+        <a class="btn btn-primary" data-referral href="#">Kayıt Ol</a>
+        <a class="btn btn-member" data-member-account href="hesap.html">Portal Hesabı</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell member-page">
+    <section class="member-hero reveal show">
+      <span class="eyebrow">PORTAL ÜYELİĞİ</span>
+      <h1>Stake Türkiye portal hesabın</h1>
+      <p>Portal özellikleri için kendi hesabını oluştur. <b>Bu hesap Stake hesabı değildir</b> ve Stake giriş bilgilerin burada kullanılmaz.</p>
+    </section>
+
+    <section id="memberAuth" class="member-auth-grid">
+      <form id="registerForm" class="member-auth-card">
+        <div class="member-card-icon">✦</div>
+        <span class="eyebrow">YENİ ÜYE</span>
+        <h2>Hesap oluştur</h2>
+        <p class="muted">Portal üyeliğin birkaç saniyede hazır.</p>
+        <div class="field"><label>Kullanıcı Adı</label><input class="input" id="regUsername" maxlength="40" autocomplete="username" required></div>
+        <div class="field"><label>E-posta</label><input class="input" id="regEmail" type="email" autocomplete="email" required></div>
+        <div class="field"><label>Parola</label><input class="input" id="regPassword" type="password" minlength="8" autocomplete="new-password" required><span class="form-hint">En az 8 karakter.</span></div>
+        <label class="member-check"><input id="ageConfirmed" type="checkbox" required><span>18 yaşından büyük olduğumu ve portal üyeliğinin Stake hesabından ayrı olduğunu kabul ediyorum.</span></label>
+        <button class="btn btn-primary btn-full btn-lg" type="submit">Portal Hesabı Oluştur</button>
+        <div id="registerMsg" class="form-message"></div>
+      </form>
+
+      <form id="memberLoginForm" class="member-auth-card member-auth-card-alt">
+        <div class="member-card-icon">↗</div>
+        <span class="eyebrow">ÜYE GİRİŞİ</span>
+        <h2>Tekrar hoş geldin</h2>
+        <p class="muted">Portal hesabına güvenli şekilde giriş yap.</p>
+        <div class="field"><label>E-posta</label><input class="input" id="loginEmail" type="email" autocomplete="email" required></div>
+        <div class="field"><label>Parola</label><input class="input" id="loginPassword" type="password" autocomplete="current-password" required></div>
+        <button class="btn btn-ghost btn-full btn-lg" type="submit">Portal Girişi Yap</button>
+        <div id="loginMsg" class="form-message"></div>
+        <div class="member-separator"><span>STAKE KAYDI</span></div>
+        <a class="btn btn-primary btn-full" data-referral href="#">KIBRIS Kodu ile Stake'e Kayıt Ol ↗</a>
+      </form>
+    </section>
+
+    <section id="memberProfile" class="member-profile" hidden>
+      <div class="member-profile-card">
+        <div class="member-avatar" id="memberAvatar">U</div>
+        <div><span class="eyebrow">PORTAL HESABIN</span><h2 id="memberName">Kullanıcı</h2><p class="muted" id="memberEmail">—</p></div>
+        <button id="memberLogout" class="btn btn-ghost">Çıkış Yap</button>
+      </div>
+      <div class="member-profile-grid">
+        <a class="panel" href="liderlik-tablosu.html"><span class="eyebrow">CANLI VERİ</span><h3>Liderlik Tablosu</h3><p class="muted">Güncel sıralamayı görüntüle →</p></a>
+        <a class="panel" data-referral href="#"><span class="eyebrow">KIBRIS</span><h3>Stake Kayıt Linki</h3><p class="muted">Affiliate bağlantısına git →</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <div class="responsible"><b>18+</b><span>Portal üyeliği Stake hesabı değildir. Kumar ve promosyon içerikleri yalnızca yasal yaş sınırının üzerindeki kullanıcılar içindir.</span></div>
+    <p style="font-size:12px;margin-top:20px">© <span id="year"></span> Stake Türkiye Tanıtım</p>
+  </footer>
+
+  <script src="default-content.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const q = s => document.querySelector(s);
+    async function jsonApi(url, options = {}) {
+      const response = await fetch(url, { ...options, headers: { 'Content-Type':'application/json', ...(options.headers || {}) } });
+      let body = {}; try { body = await response.json(); } catch {}
+      if (!response.ok) throw new Error(body.error || 'İşlem başarısız.');
+      return body;
+    }
+    function message(el, text, ok = false) { el.textContent = text; el.className = 'form-message ' + (ok ? 'ok' : 'bad'); }
+    function safeNext() {
+      const value = new URLSearchParams(location.search).get('next') || '';
+      if (!value || /^https?:/i.test(value) || value.startsWith('//') || value.includes('\\')) return '';
+      return /^[A-Za-z0-9_.?=&%-]+$/.test(value) ? value : '';
+    }
+    function showProfile(user, allowRedirect = false) {
+      const next = safeNext();
+      if (allowRedirect && next) { location.replace(next); return; }
+      q('#memberAuth').hidden = true; q('#memberProfile').hidden = false;
+      q('#memberName').textContent = user.username; q('#memberEmail').textContent = user.email;
+      q('#memberAvatar').textContent = (user.username || 'U').slice(0,1).toUpperCase();
+    }
+    async function checkSession() {
+      try { const j = await jsonApi('/api/user-session'); if (j.authenticated && j.user) showProfile(j.user, true); } catch {}
+    }
+    q('#registerForm').addEventListener('submit', async e => {
+      e.preventDefault(); const btn = e.submitter; btn.disabled = true; btn.textContent = 'Hesap oluşturuluyor…';
+      try {
+        const j = await jsonApi('/api/register', { method:'POST', body:JSON.stringify({ username:q('#regUsername').value.trim(), email:q('#regEmail').value.trim(), password:q('#regPassword').value, ageConfirmed:q('#ageConfirmed').checked }) });
+        message(q('#registerMsg'), 'Hesabın oluşturuldu ✓', true); showProfile(j.user, true);
+      } catch (err) { message(q('#registerMsg'), err.message); }
+      finally { btn.disabled = false; btn.textContent = 'Portal Hesabı Oluştur'; }
+    });
+    q('#memberLoginForm').addEventListener('submit', async e => {
+      e.preventDefault(); const btn = e.submitter; btn.disabled = true; btn.textContent = 'Giriş yapılıyor…';
+      try {
+        const j = await jsonApi('/api/user-login', { method:'POST', body:JSON.stringify({ email:q('#loginEmail').value.trim(), password:q('#loginPassword').value }) });
+        message(q('#loginMsg'), 'Giriş başarılı ✓', true); showProfile(j.user, true);
+      } catch (err) { message(q('#loginMsg'), err.message); }
+      finally { btn.disabled = false; btn.textContent = 'Portal Girişi Yap'; }
+    });
+    q('#memberLogout').addEventListener('click', async () => { await jsonApi('/api/user-logout', { method:'POST' }).catch(() => {}); location.reload(); });
+    checkSession();
+  </script>
+</body>
+</html>

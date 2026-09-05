@@ -1,0 +1,9 @@
+{
+  "name": "stake-turkiye-portal",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Multi-page affiliate portal with Vercel serverless admin backend and Google Sheets leaderboard",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1"
+  }
+}

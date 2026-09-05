@@ -1,0 +1,10 @@
+V4 GUNCELLEMELERI
+- Ana menü premium tasarımla yeniden düzenlendi ve daha fazla sayfa eklendi.
+- İç sayfalara masaüstünde ana sayfayla aynı premium navigasyon eklendi; mobilde hamburger menü korunur.
+- Öne Çıkan Fırsatlar görsellerindeki gömülü yazılar kaldırılmak için görseller temiz görsel alanlarından yeniden kırpıldı.
+- Fırsat kartlarındaki yazı/görsel üst üste binmesi düzeltildi.
+- Kampanyalar sayfası da ana sayfadaki görsel kart tasarımına geçirildi.
+- Canlı liderlik tablosunda Wager ve ödül sütunları korunup mobil ölçüler iyileştirildi.
+- Üstteki güncel kodlar alanı daha premium görünüme getirildi.
+- Mobilde hero, liderlik, kartlar ve butonlar için ayrı responsive düzenlemeler yapıldı.
+- Mevcut admin paneli ve veri yapısı bozulmadan korundu.

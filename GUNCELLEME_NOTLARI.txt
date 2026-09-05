@@ -1,0 +1,14 @@
+Stake Türkiye Portal - Güncelleme
+
+- Yeni bonus-codes.html sayfası eklendi.
+- Bonus kodları admin panelden eklenebilir; en yeni kod üste gelir.
+- Sistem en fazla 50 bonus kodu tutar; 51. kodda en eski kod otomatik çıkarılır.
+- Bonus kodları için tutar, kişi limiti, durum, not ve tarih bilgisi desteklenir.
+- Ana sayfanın üst bölümüne güncel bonus kodları alanı eklendi.
+- Yeni cekilisler.html sayfası eklendi.
+- Çekilişler admin panelden eklenebilir, aktif/pasif yapılabilir ve silinebilir.
+- Ana sayfaya Çekilişlere Git alanı eklendi.
+- Admin paneline Bonus Kodları ve Çekilişler sekmeleri eklendi.
+- Liderlik tablosunda affiliate_name backend tarafında gizlenebilir (varsayılan: gizli).
+- user_name backend tarafında ilk/son karakter görünecek şekilde maskelenebilir (varsayılan: açık).
+- Liderlik tablosunda rank hücresi artık kolon adına göre algılanır.

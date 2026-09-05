@@ -1,0 +1,24 @@
+ÇEKİLİŞ SİSTEMİ V3
+
+- Çekilişler ayrı Neon PostgreSQL tablolarında tutulur; site içerik JSON'una bağlı değildir.
+- Admin panel > Çekilişler bölümünden başlık, ödül, açıklama ve bitiş tarihiyle yeni çekiliş oluşturulur.
+- Kullanıcı çekilişe katılmak için portal hesabına giriş yapmalıdır.
+- Katılım sırasında geçerli Telegram kullanıcı adı zorunludur.
+- Bir portal hesabı aynı çekilişe yalnızca bir kez katılabilir.
+- Süre bittikten sonra backend katılımcılar arasından rastgele bir kullanıcı seçer ve sonucu kalıcı olarak kaydeder.
+- Aynı çekiliş için kazanan tekrar değiştirilmez.
+- Public sayfada kazanan kullanıcı adı maskeli görünür; e-posta ve Telegram yalnızca admin panelde görünür.
+- Admin panelden çekiliş pasif/aktif yapılabilir, katılımcılar görüntülenebilir ve çekiliş silinebilir.
+- Eski sürümde site_content içinde bulunan çekilişler ilk çalışmada yalnızca bir kez yeni tabloya aktarılır.
+- admin-onizleme.html kaldırılmıştır.
+
+GEREKLİ VERCEL ENV:
+DATABASE_URL
+ADMIN_PASSWORD
+ADMIN_SECRET
+
+V3.1 DÜZELTME
+- Aktif çekiliş kartında Çekilişe Katıl butonu artık href alanına bağlı değildir.
+- Buton aktiflik, bitiş tarihi, portal oturumu ve kullanıcının katılım durumuna göre gösterilir.
+- Giriş yapmamış kullanıcı Portal Hesabı sayfasına yönlenir ve giriş/kayıt sonrası çekiliş sayfasına geri döner.
+- Telegram kullanıcı adı çekiliş kartının içinde alınır.

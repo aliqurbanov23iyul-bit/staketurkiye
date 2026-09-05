@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin Panel | Stake Türkiye</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+  <!-- Login View -->
+  <div id="loginView" class="login-wrap">
+    <form id="loginForm" class="login-card">
+      <div class="admin-login-badge">ST</div>
+      <span class="eyebrow">GÜVENLİ YÖNETİM PANELİ</span>
+      <h1>Kontrol Merkezi</h1>
+      <p class="muted">İçerik, bonus, canlı sıralama ve portal üyelerini tek yerden yönet.</p>
+
+      <div class="field">
+        <label>Admin Parolası</label>
+        <input id="password" class="input" type="password" autocomplete="current-password" required>
+      </div>
+
+      <button class="btn btn-primary btn-full" type="submit">Giriş Yap</button>
+      <p id="loginError" class="error" style="padding:12px 0 0"></p>
+      <p style="text-align:center"><a class="muted" href="index.html">← Siteye dön</a></p>
+    </form>
+  </div>
+
+  <!-- Admin View -->
+  <div id="adminView" style="display:none">
+    <div class="admin-shell">
+
+      <div class="admin-head">
+        <div>
+          <span class="eyebrow">STAKE TÜRKİYE • CONTROL CENTER</span>
+          <h1 style="margin:6px 0">Yönetim Paneli</h1>
+          <p class="muted" style="margin:0">Canlı site içeriğini ve portal üyelerini yönet.</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <a class="btn btn-ghost" href="index.html" target="_blank">Siteyi Aç ↗</a>
+          <button id="logoutBtn" class="btn">Çıkış</button>
+        </div>
+      </div>
+
+      <div id="dbNotice" class="notice" style="margin-bottom:15px">Backend kontrol ediliyor…</div>
+
+      <div class="admin-grid">
+
+        <!-- Sidebar Nav -->
+        <aside class="admin-nav">
+          <div class="admin-nav-title">MENÜ</div>
+          <button class="active" data-tab="dashboard"><span>◈</span> Dashboard</button>
+          <button data-tab="site"><span>⚙</span> Genel Ayarlar</button>
+          <button data-tab="offer"><span>✦</span> KIBRIS Bonus Alanı</button>
+                    <button data-tab="bonusCodes"><span>✦</span> Bonus Kodları</button>
+          <button data-tab="giveaways"><span>🎁</span> Çekilişler</button>
+          <button data-tab="leaderboard"><span>▥</span> Liderlik Tablosu</button>
+          <button data-tab="campaigns"><span>◇</span> Kampanyalar</button>
+                    <button data-tab="faq"><span>?</span> SSS</button>
+          <button data-tab="users"><span>♙</span> Portal Üyeleri</button>
+        </aside>
+
+        <section>
+
+          <!-- Dashboard -->
+          <div class="admin-pane active" data-pane="dashboard">
+            <div class="admin-dashboard-hero">
+              <div>
+                <span class="eyebrow">CANLI KONTROL</span>
+                <h2>Hoş geldin 👋</h2>
+                <p>Buradan sitenin kritik alanlarını kod açmadan yönetebilirsin.</p>
+              </div>
+              <a class="btn btn-primary" href="index.html" target="_blank">Canlı Siteyi Aç ↗</a>
+            </div>
+            <div class="admin-stat-grid">
+              <div class="admin-stat-card"><span>Database</span><strong id="statDb">Kontrol…</strong><small>Neon bağlantısı</small></div>
+              <div class="admin-stat-card"><span>Portal Üyeleri</span><strong id="statUsers">—</strong><small>Toplam kayıt</small></div>
+              <div class="admin-stat-card"><span>Kampanyalar</span><strong id="statCampaigns">—</strong><small>Tanımlı kart</small></div>
+              <strong id="statEvents" hidden>0</strong>
+              <div class="admin-stat-card"><span>Bonus Kodları</span><strong id="statCodes">—</strong><small>Son 50 kod</small></div>
+              <div class="admin-stat-card"><span>Çekilişler</span><strong id="statGiveaways">—</strong><small>Tanımlı çekiliş</small></div>
+            </div>
+            <div class="admin-section">
+              <div class="admin-section-head"><div><span class="eyebrow">HIZLI ERİŞİM</span><h2>En sık kullanılan ayarlar</h2></div></div>
+              <div class="admin-quick-grid">
+                <button type="button" data-jump="offer"><b>KIBRIS Bonus Alanı</b><span>Kod, bonus ve CTA'yı değiştir →</span></button>
+                <button type="button" data-jump="bonusCodes"><b>Bonus Kodları</b><span>Günlük kodu ekle ve yayınla →</span></button>
+                <button type="button" data-jump="giveaways"><b>Çekilişler</b><span>Yeni çekiliş oluştur →</span></button>
+                <button type="button" data-jump="leaderboard"><b>Canlı Sıralama</b><span>Liderlik tablosu kaynağını yönet →</span></button>
+                <button type="button" data-jump="site"><b>Referral Linkleri</b><span>Kayıt ve giriş URL'lerini değiştir →</span></button>
+                <button type="button" data-jump="users"><b>Portal Üyeleri</b><span>Kayıtlı kullanıcıları görüntüle →</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Genel Ayarlar -->
+          <div class="admin-pane" data-pane="site">
+            <div class="admin-section">
+              <h2>Genel Ayarlar</h2>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Site Adı</label>
+                  <input class="input" id="siteName">
+                </div>
+                <div class="field">
+                  <label>Üst Rozet</label>
+                  <input class="input" id="siteBadge">
+                </div>
+                <div class="field">
+                  <label>Referral URL</label>
+                  <input class="input" id="referralUrl" placeholder="https://stake.com/?c=...">
+                </div>
+                <div class="field">
+                  <label>Giriş URL</label>
+                  <input class="input" id="loginUrl">
+                </div>
+              </div>
+              <div class="field">
+                <label>Hero Başlık</label>
+                <input class="input" id="heroTitle">
+              </div>
+              <div class="field">
+                <label>Hero Açıklama</label>
+                <textarea class="input" id="heroText"></textarea>
+              </div>
+              <div class="field">
+                <label>Duyuru Çubuğu</label>
+                <input class="input" id="announcement">
+              </div>
+              <div class="field">
+                <label>Affiliate Açıklaması</label>
+                <textarea class="input" id="affiliateNote"></textarea>
+              </div>
+            </div>
+
+            <div class="admin-section" style="margin-top:16px">
+              <h2>İletişim &amp; Telegram / WhatsApp Ayarları</h2>
+              <p class="muted">İletişim sayfasındaki başlıklar, açıklamalar, linkler ve görünürlük ayarları buradan yönetilir.</p>
+              <div class="form-grid">
+                <div class="field">
+                  <label>WhatsApp Linki (wa.me)</label>
+                  <input class="input" id="whatsappUrl" placeholder="https://wa.me/905XXXXXXXXX">
+                </div>
+                <div class="field">
+                  <label>Telegram Kanal / Destek Linki</label>
+                  <input class="input" id="telegramUrl" placeholder="https://t.me/KULLANICI_ADINIZ">
+                </div>
+                <div class="field">
+                  <label>Telegram Bot Linki</label>
+                  <input class="input" id="telegramBotUrl" placeholder="https://t.me/BOT_ADINIZ">
+                </div>
+                <div class="field"><label>Telegram Bot Adı</label><input class="input" id="telegramBotName" placeholder="Stake Türkiye Bot"></div>
+                <div class="field"><label>İletişim E-postası</label><input class="input" id="contactEmail" type="email" placeholder="destek@example.com"></div>
+                <div class="field"><label>Logo Alt Yazısı</label><input class="input" id="brandSubtitle"></div>
+                <div class="field"><label>SEO Açıklaması</label><input class="input" id="metaDescription"></div>
+              </div>
+              <div class="field"><label>İletişim Sayfası Başlığı</label><input class="input" id="contactTitle"></div>
+              <div class="field"><label>İletişim Sayfası Açıklaması</label><textarea class="input" id="contactText"></textarea></div>
+              <div class="form-grid">
+                <div class="field"><label>WhatsApp Kart Başlığı</label><input class="input" id="whatsappTitle"></div>
+                <div class="field"><label>Telegram Kart Başlığı</label><input class="input" id="telegramTitle"></div>
+              </div>
+              <div class="field"><label>WhatsApp Kart Açıklaması</label><textarea class="input" id="whatsappText"></textarea></div>
+              <div class="field"><label>Telegram Kart Açıklaması</label><textarea class="input" id="telegramText"></textarea></div>
+              <div class="field"><label>Bot Kart Açıklaması</label><textarea class="input" id="botText"></textarea></div>
+              <div class="admin-toggle-grid">
+                <label class="switch-row"><input id="showWhatsapp" type="checkbox"><span>WhatsApp görünsün</span></label>
+                <label class="switch-row"><input id="showTelegram" type="checkbox"><span>Telegram görünsün</span></label>
+                <label class="switch-row"><input id="showTelegramBot" type="checkbox"><span>Telegram Bot görünsün</span></label>
+                <label class="switch-row"><input id="showAnnouncement" type="checkbox"><span>Duyuru çubuğu görünsün</span></label>
+                <label class="switch-row"><input id="showMemberButton" type="checkbox"><span>Portal Hesabı butonu görünsün</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- KIBRIS Bonus Alanı -->
+          <div class="admin-pane" data-pane="offer">
+            <div class="admin-section">
+              <div class="admin-section-head">
+                <div><span class="eyebrow">ANA SAYFA</span><h2>KIBRIS Bonus Alanı</h2><p class="muted">Ana sayfadaki büyük bonus kartını buradan yönet.</p></div>
+                <label class="switch-row"><input id="offerEnabled" type="checkbox"><span>Aktif</span></label>
+              </div>
+              <div class="form-grid">
+                <div class="field"><label>Üst Etiket</label><input class="input" id="offerEyebrow"></div>
+                <div class="field"><label>Başlık</label><input class="input" id="offerTitle"></div>
+                <div class="field"><label>Birinci Bonus</label><input class="input" id="offerPrimary" placeholder="$21 BONUS"></div>
+                <div class="field"><label>İkinci Bonus</label><input class="input" id="offerSecondary" placeholder="%200 YATIRIM BONUSU"></div>
+                <div class="field"><label>Kopyalanabilir Kod</label><input class="input input-code" id="offerCode" placeholder="KIBRIS"></div>
+                <div class="field"><label>Buton Yazısı</label><input class="input" id="offerButton"></div>
+              </div>
+              <div class="field"><label>Açıklama</label><textarea class="input" id="offerDescription"></textarea></div>
+              <div class="field"><label>Alt Not</label><input class="input" id="offerNote"></div>
+              <div class="notice">Kayıt butonu otomatik olarak Genel Ayarlar bölümündeki <b>Referral URL</b> adresini kullanır.</div>
+            </div>
+          </div>
+
+          <!-- Turnuva -->
+          <div class="admin-pane" data-pane="tournament" hidden>
+            <div class="admin-section">
+              <h2>Çevrim Turnuvası</h2>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Başlık</label>
+                  <input class="input" id="tTitle">
+                </div>
+                <div class="field">
+                  <label>Durum</label>
+                  <input class="input" id="tStatus">
+                </div>
+                <div class="field">
+                  <label>Toplam Ödül</label>
+                  <input class="input" id="tPrize">
+                </div>
+                <div class="field">
+                  <label>Bitiş Tarihi</label>
+                  <input class="input" id="tEnd" placeholder="2026-09-30T23:59:59+03:00">
+                </div>
+              </div>
+              <div class="field">
+                <label>Alt Başlık</label>
+                <input class="input" id="tSubtitle">
+              </div>
+              <div class="field">
+                <label>Açıklama</label>
+                <textarea class="input" id="tIntro"></textarea>
+              </div>
+              <div class="field">
+                <label>Kurallar — her satıra bir kural</label>
+                <textarea class="input" id="tRules" style="min-height:150px"></textarea>
+              </div>
+              <div class="field">
+                <label>Ödül Dağılımı (JSON)</label>
+                <textarea class="input" id="tPrizes" style="min-height:170px"></textarea>
+                <span class="json-help">Örnek: [{"rank":"1","reward":"₺50.000"}]</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bonus Kodları -->
+          <div class="admin-pane" data-pane="bonusCodes"><div class="admin-section"><div class="admin-section-head"><div><span class="eyebrow">GÜNLÜK YÖNETİM</span><h2>Bonus Kodları</h2><p class="muted">Yeni kod en üste eklenir. 50 kod dolunca en eski kod otomatik silinir.</p></div><label class="switch-row"><input id="codesEnabled" type="checkbox"><span>Sayfada aktif</span></label></div>
+            <div class="admin-add-box"><div class="form-grid"><div class="field"><label>Bonus Kodu *</label><input class="input input-code" id="newCode" placeholder="ÖRN: STAKE15"></div><div class="field"><label>Başlık</label><input class="input" id="newCodeTitle" placeholder="Çevrimsiz Nakit Bonus"></div><div class="field"><label>Bonus / Tutar</label><input class="input" id="newCodeAmount" placeholder="$5 Nakit Bonus"></div><div class="field"><label>Kişi Limiti</label><input class="input" id="newCodeLimit" placeholder="15 kişi"></div><div class="field"><label>Durum</label><select class="input" id="newCodeStatus"><option>Aktif</option><option>Tükendi</option><option>Süresi Doldu</option></select></div><div class="field"><label>Not</label><input class="input" id="newCodeNote" placeholder="İsteğe bağlı"></div></div><button class="btn btn-primary" id="addBonusCode" type="button">Kodu Ekle ve Yayınla</button></div>
+            <div class="form-grid"><div class="field"><label>Sayfa Başlığı</label><input class="input" id="codesTitle"></div><div class="field"><label>Ana Sayfada Gösterilecek Kod Sayısı</label><input class="input" id="codesHomeCount" type="number" min="1" max="6"></div></div><div class="field"><label>Açıklama</label><textarea class="input" id="codesSubtitle"></textarea></div><div class="member-admin-summary"><strong id="codesCount">0</strong><span>/ 50 kod kayıtlı</span></div><div id="codesAdminList" class="admin-item-list"></div>
+          </div></div>
+
+          <!-- Çekilişler -->
+          <div class="admin-pane" data-pane="giveaways"><div class="admin-section"><div class="admin-section-head"><div><span class="eyebrow">İÇERİK YÖNETİMİ</span><h2>Çekilişler</h2><p class="muted">Çekiliş ekle, aktif/pasif yap veya sil.</p></div><label class="switch-row"><input id="giveawaysEnabled" type="checkbox"><span>Sayfada aktif</span></label></div>
+            <div class="admin-add-box"><div class="form-grid"><div class="field"><label>Başlık *</label><input class="input" id="newGiveTitle" placeholder="Örn: Ali 1000 TL Çekilişi"></div><div class="field"><label>Ödül *</label><input class="input" id="newGivePrize" placeholder="₺1.000"></div><div class="field"><label>Bitiş Tarihi *</label><input class="input" id="newGiveDate" type="datetime-local"></div></div><div class="field"><label>Açıklama</label><textarea class="input" id="newGiveDescription" placeholder="Katılım şartları veya kısa açıklama"></textarea></div><div class="notice">Katılım linki gerekmez. Kullanıcı <b>Portal Hesabı</b> ile giriş yapar, Telegram kullanıcı adını girer ve sistem katılımı veritabanına kaydeder.</div><button class="btn btn-primary" id="addGiveaway" type="button">Çekilişi Ekle ve Yayınla</button></div>
+            <div class="form-grid"><div class="field"><label>Sayfa Başlığı</label><input class="input" id="giveawaysTitle"></div><div class="field"><label>Ana Sayfada göster</label><label class="switch-row" style="margin-top:10px"><input id="giveawaysHomeEnabled" type="checkbox"><span>Çekilişlere Git alanı aktif</span></label></div></div><div class="field"><label>Açıklama</label><textarea class="input" id="giveawaysSubtitle"></textarea></div><div id="giveawaysAdminList" class="admin-item-list"></div><div id="giveawayParticipantsPanel" class="admin-section" style="margin-top:18px" hidden></div>
+          </div></div>
+
+          <!-- Liderlik -->
+          <div class="admin-pane" data-pane="leaderboard">
+            <div class="admin-section">
+              <h2>Google Sheets Liderlik Tablosu</h2>
+              <div class="notice">
+                Sheet bağlantısını buraya ekle. Sheet, "bağlantıya sahip herkes görüntüleyebilir" olmalı.
+                Sistem veriyi backend üzerinden okuyup sitede kendi tasarımımızla gösterir.
+              </div>
+              <div class="field" style="margin-top:16px">
+                <label>Google Sheets URL</label>
+                <input class="input" id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/.../edit#gid=0">
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Sayfa Başlığı</label>
+                  <input class="input" id="lbTitle">
+                </div>
+                <div class="field">
+                  <label>Yenileme Sıklığı (saniye)</label>
+                  <input class="input" id="lbRefresh" type="number" min="10">
+                </div>
+              </div>
+              <div class="field">
+                <label>Açıklama</label>
+                <textarea class="input" id="lbSubtitle"></textarea>
+              </div>
+              <div class="admin-toggle-grid"><label class="switch-row"><input id="hideAffiliate" type="checkbox"><span>affiliate_name kolonunu gizle</span></label><label class="switch-row"><input id="maskUsernames" type="checkbox"><span>Kullanıcı adlarını maskele (ilk/son harf)</span></label></div>
+              <button id="testSheet" class="btn btn-ghost" type="button">Sheet Bağlantısını Test Et</button>
+              <div id="sheetResult" class="muted" style="margin-top:12px"></div>
+            </div>
+          </div>
+
+          <!-- Öne Çıkan Fırsatlar -->
+          <div class="admin-pane" data-pane="campaigns">
+            <div class="admin-section">
+              <div class="admin-section-head"><div><span class="eyebrow">ANA SAYFA</span><h2>Öne Çıkan Fırsatlar</h2><p class="muted">Kartları ekle, düzenle veya tamamen sil. Silinen kartın çerçevesi de siteden kaldırılır.</p></div></div>
+              <div class="form-grid">
+                <div class="field"><label>Etiket</label><input class="input" id="newCampaignBadge" placeholder="SPOR / CASINO / ÖZEL"></div>
+                <div class="field"><label>Başlık</label><input class="input" id="newCampaignTitle" placeholder="%200 Yatırım Bonusu"></div>
+                <div class="field"><label>Büyük Değer</label><input class="input" id="newCampaignValue" placeholder="%200"></div>
+                <div class="field"><label>Buton Yazısı</label><input class="input" id="newCampaignButton" placeholder="Detayları İncele"></div><div class="field"><label>Hazır Görsel</label><select class="input" id="newCampaignVisual"><option value="casino">Casino</option><option value="sport">Spor / Futbol</option><option value="live">Canlı Casino</option><option value="cyprus">Kıbrıs</option></select></div>
+                <div class="field" style="grid-column:1/-1"><label>Özel Görsel URL <small style="opacity:.65">(isteğe bağlı)</small></label><input class="input" id="newCampaignImageUrl" placeholder="https://.../gorsel.jpg"><small class="muted">Doldurursan hazır görsel yerine bu fotoğraf kullanılır.</small></div>
+                <div class="field" style="grid-column:1/-1"><label>Açıklama</label><textarea class="input" id="newCampaignText" placeholder="Kısa fırsat açıklaması"></textarea></div>
+                <div class="field" style="grid-column:1/-1"><label>Yönlendirme Linki (boşsa kayıt linki kullanılır)</label><input class="input" id="newCampaignHref" placeholder="https://..."></div>
+              </div>
+              <label class="switch-row" style="margin:14px 0"><input id="newCampaignFramed" type="checkbox" checked><span>Çerçeveli kart olarak göster</span></label>
+              <button id="addCampaign" class="btn btn-primary" type="button">Fırsat Ekle +</button>
+              <div id="campaignsAdminList" style="display:grid;gap:10px;margin-top:18px"></div>
+              <textarea class="input" id="campaignsJson" hidden></textarea>
+            </div>
+          </div>
+
+          <!-- Turnuvalar Listesi -->
+          <div class="admin-pane" data-pane="events" hidden>
+            <div class="admin-section">
+              <h2>Turnuvalar Listesi</h2>
+              <textarea class="input" id="eventsJson" style="min-height:420px"></textarea>
+            </div>
+          </div>
+
+          <!-- SSS -->
+          <div class="admin-pane" data-pane="faq">
+            <div class="admin-section">
+              <h2>Sık Sorulan Sorular</h2>
+              <textarea class="input" id="faqJson" style="min-height:420px"></textarea>
+            </div>
+          </div>
+
+          <!-- Portal Üyeleri -->
+          <div class="admin-pane" data-pane="users">
+            <div class="admin-section">
+              <div class="admin-section-head">
+                <div><span class="eyebrow">DATABASE</span><h2>Portal Üyeleri</h2><p class="muted">Bu hesaplar Stake hesabı değildir; yalnızca bu portalın üyelik sistemidir.</p></div>
+                <button id="refreshUsers" class="btn btn-ghost" type="button">Yenile</button>
+              </div>
+              <div class="member-admin-summary"><strong id="userCount">0</strong><span>toplam portal üyesi</span></div>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead><tr><th>ID</th><th>Kullanıcı</th><th>E-posta</th><th>Durum</th><th>Kayıt</th><th>Son Giriş</th></tr></thead>
+                  <tbody id="usersBody"><tr><td colspan="6" class="muted">Kullanıcılar yükleniyor…</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kaydet Butonu -->
+          <div style="position:sticky;bottom:14px;display:flex;justify-content:flex-end">
+            <button id="saveBtn" class="btn btn-primary btn-lg">Tüm Değişiklikleri Kaydet</button>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="default-content.js"></script>
+  <script>
+    const cloneData = (value) => { try { return typeof structuredClone === 'function' ? structuredClone(value) : JSON.parse(JSON.stringify(value)); } catch (_) { return JSON.parse(JSON.stringify(value || {})); } };
+    let current = cloneData(window.DEFAULT_CONTENT);
+    let giveawayAdminItems = [];
+    let giveawayAdminMeta = {};
+    let collectWarnings = [];
+    const $ = s => document.querySelector(s);
+
+    const toast = (m, ok = true) => {
+      const t = $('#toast');
+      t.textContent = m;
+      t.className = 'toast show ' + (ok ? 'ok' : 'bad');
+      setTimeout(() => t.className = 'toast', 3200);
+    };
+
+    async function api(url, opt = {}) {
+      const r = await fetch(url, {
+        ...opt,
+        headers: { 'Content-Type': 'application/json', ...(opt.headers || {}) }
+      });
+      let j = {};
+      try { j = await r.json(); } catch {}
+      if (!r.ok) throw new Error(j.error || 'İşlem başarısız');
+      return j;
+    }
+
+    async function boot() {
+      try {
+        const s = await api('/api/session');
+        if (s.authenticated) showAdmin();
+      } catch {}
+    }
+
+    $('#loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      $('#loginError').textContent = '';
+      try {
+        await api('/api/login', { method: 'POST', body: JSON.stringify({ password: $('#password').value }) });
+        await showAdmin();
+      } catch (err) {
+        $('#loginError').textContent = err.message;
+      }
+    });
+
+    async function showAdmin() {
+      $('#loginView').style.display = 'none';
+      $('#adminView').style.display = 'block';
+      try {
+        const j = await api('/api/content');
+        if (j.data) current = merge(current, j.data);
+        $('#dbNotice').className = 'notice ' + (j.configured ? '' : 'warn');
+        $('#dbNotice').textContent = j.configured
+          ? 'Database bağlı. Kaydettiğin değişiklikler Vercel yeniden deploy olsa bile korunur.'
+          : 'DATABASE_URL ayarlanmamış. Panel açılır ancak kayıt yapılamaz; README içindeki Vercel + Neon kurulumunu tamamla.';
+        fill();
+        $('#statDb').textContent = j.configured ? 'Bağlı ✓' : 'Bağlı değil';
+        $('#statCampaigns').textContent = (current.campaigns || []).length;
+        $('#statEvents').textContent = (current.events || []).length;
+        $('#statCodes').textContent = (current.bonusCodes || []).length;
+        $('#statGiveaways').textContent = '…';
+        await loadGiveawayAdminSummary().catch(err => {
+          $('#statGiveaways').textContent = '—';
+          renderGiveaways();
+          console.warn('Çekiliş özeti yüklenemedi:', err);
+        });
+        loadUsers().catch(() => {});
+      } catch (err) {
+        toast(err.message, false);
+      }
+    }
+
+    function merge(a, b) {
+      for (const [k, v] of Object.entries(b || {})) {
+        if (Array.isArray(v)) a[k] = v;
+        else if (v && typeof v === 'object') a[k] = merge(a[k] || {}, v);
+        else a[k] = v;
+      }
+      return a;
+    }
+
+    function fill() {
+      const s = current.site, t = current.tournament, l = current.leaderboard, o = current.welcomeOffer || {}, bc = current.bonusCodesConfig || {}, gc = current.giveawaysConfig || {};
+      $('#siteName').value        = s.name || '';
+      $('#siteBadge').value       = s.badge || '';
+      $('#referralUrl').value     = s.referralUrl || '';
+      $('#loginUrl').value        = s.loginUrl || '';
+      $('#heroTitle').value       = s.heroTitle || '';
+      $('#heroText').value        = s.heroText || '';
+      $('#announcement').value    = s.announcement || '';
+      $('#affiliateNote').value   = s.affiliateNote || '';
+      $('#whatsappUrl').value     = s.whatsappUrl || '';
+      $('#telegramUrl').value     = s.telegramUrl || '';
+      $('#telegramBotUrl').value  = s.telegramBotUrl || '';
+      $('#telegramBotName').value = s.telegramBotName || '';
+      $('#contactEmail').value      = s.email || '';
+      $('#brandSubtitle').value     = s.brandSubtitle || '';
+      $('#metaDescription').value   = s.metaDescription || '';
+      $('#contactTitle').value      = s.contactTitle || '';
+      $('#contactText').value       = s.contactText || '';
+      $('#whatsappTitle').value     = s.whatsappTitle || '';
+      $('#whatsappText').value      = s.whatsappText || '';
+      $('#telegramTitle').value     = s.telegramTitle || '';
+      $('#telegramText').value      = s.telegramText || '';
+      $('#botText').value           = s.botText || '';
+      $('#showWhatsapp').checked    = s.showWhatsapp !== false;
+      $('#showTelegram').checked    = s.showTelegram !== false;
+      $('#showTelegramBot').checked = s.showTelegramBot !== false;
+      $('#showAnnouncement').checked = s.showAnnouncement !== false;
+      $('#showMemberButton').checked = s.showMemberButton !== false;
+      $('#offerEnabled').checked     = o.enabled !== false;
+      $('#offerEyebrow').value       = o.eyebrow || '';
+      $('#offerTitle').value         = o.title || '';
+      $('#offerPrimary').value       = o.primaryBonus || '';
+      $('#offerSecondary').value     = o.secondaryBonus || '';
+      $('#offerDescription').value   = o.description || '';
+      $('#offerCode').value          = o.code || 'KIBRIS';
+      $('#offerButton').value        = o.buttonText || '';
+      $('#offerNote').value          = o.note || '';
+      $('#tTitle').value          = t.title || '';
+      $('#tStatus').value         = t.status || '';
+      $('#tPrize').value          = t.prize || '';
+      $('#tEnd').value            = t.endDate || '';
+      $('#tSubtitle').value       = t.subtitle || '';
+      $('#tIntro').value          = t.intro || '';
+      $('#tRules').value          = (t.rules || []).join('\n');
+      $('#tPrizes').value         = JSON.stringify(t.prizes || [], null, 2);
+      $('#sheetUrl').value        = l.sheetUrl || '';
+      $('#lbTitle').value         = l.title || '';
+      $('#lbSubtitle').value      = l.subtitle || '';
+      $('#lbRefresh').value       = l.refreshSeconds || 30;
+      $('#hideAffiliate').checked   = l.hideAffiliate !== false;
+      $('#maskUsernames').checked   = l.maskUsernames !== false;
+      $('#codesEnabled').checked    = bc.enabled !== false;
+      $('#codesTitle').value        = bc.title || 'Güncel Bonus Kodları';
+      $('#codesSubtitle').value     = bc.subtitle || '';
+      $('#codesHomeCount').value    = bc.homeCount || 3;
+      $('#giveawaysEnabled').checked = gc.enabled !== false;
+      $('#giveawaysHomeEnabled').checked = gc.homeEnabled !== false;
+      $('#giveawaysTitle').value    = gc.title || 'Çekilişler';
+      $('#giveawaysSubtitle').value = gc.subtitle || '';
+      renderBonusCodes(); renderGiveaways();
+      $('#campaignsJson').value   = JSON.stringify(current.campaigns || [], null, 2);
+      renderCampaignsAdmin();
+      $('#eventsJson').value      = JSON.stringify(current.events || [], null, 2);
+      $('#faqJson').value         = JSON.stringify(current.faq || [], null, 2);
+    }
+
+
+    function normalizeUrl(value) {
+      const v = String(value || '').trim();
+      if (!v) return '';
+      if (/^(https?:)?\/\//i.test(v)) return v.startsWith('//') ? `https:${v}` : v;
+      return `https://${v}`;
+    }
+
+    function parseJsonArrayField(selector, label, fallback = []) {
+      const el = $(selector);
+      const raw = String(el?.value || '').trim();
+      if (!raw) {
+        if (el) el.value = '[]';
+        return [];
+      }
+
+      const attempts = [
+        raw,
+        raw.replace(/[“”]/g, '\"').replace(/[‘’]/g, "'").replace(/,\s*([}\]])/g, '$1')
+      ];
+      for (const candidate of attempts) {
+        try {
+          const parsed = JSON.parse(candidate);
+          if (!Array.isArray(parsed)) throw new Error('array-required');
+          if (candidate !== raw && el) el.value = JSON.stringify(parsed, null, 2);
+          return parsed;
+        } catch (_) {}
+      }
+
+      const safe = Array.isArray(fallback) ? cloneData(fallback) : [];
+      if (el) el.value = JSON.stringify(safe, null, 2);
+      collectWarnings.push(`${label} alanında bozuk JSON vardı; önceki geçerli içerik korundu.`);
+      return safe;
+    }
+
+    function collect() {
+      collectWarnings = [];
+      const campaigns = parseJsonArrayField('#campaignsJson', 'Kampanyalar', current.campaigns || []);
+      const events = parseJsonArrayField('#eventsJson', 'Turnuvalar', current.events || []);
+      const faq = parseJsonArrayField('#faqJson', 'SSS', current.faq || []);
+      const prizes = parseJsonArrayField('#tPrizes', 'Turnuva ödülleri', current.tournament?.prizes || []);
+      return {
+        site: {
+          name:            $('#siteName').value.trim(),
+          badge:           $('#siteBadge').value.trim(),
+          heroTitle:       $('#heroTitle').value.trim(),
+          heroText:        $('#heroText').value.trim(),
+          referralUrl:     normalizeUrl($('#referralUrl').value),
+          loginUrl:        normalizeUrl($('#loginUrl').value),
+          announcement:    $('#announcement').value.trim(),
+          affiliateNote:   $('#affiliateNote').value.trim(),
+          whatsappUrl:     $('#whatsappUrl').value.trim(),
+          telegramUrl:     $('#telegramUrl').value.trim(),
+          telegramBotUrl:  $('#telegramBotUrl').value.trim(),
+          telegramBotName: $('#telegramBotName').value.trim(),
+          email:           $('#contactEmail').value.trim(),
+          brandSubtitle:   $('#brandSubtitle').value.trim(),
+          metaDescription: $('#metaDescription').value.trim(),
+          contactTitle:    $('#contactTitle').value.trim(),
+          contactText:     $('#contactText').value.trim(),
+          whatsappTitle:   $('#whatsappTitle').value.trim(),
+          whatsappText:    $('#whatsappText').value.trim(),
+          telegramTitle:   $('#telegramTitle').value.trim(),
+          telegramText:    $('#telegramText').value.trim(),
+          botText:         $('#botText').value.trim(),
+          showWhatsapp:    $('#showWhatsapp').checked,
+          showTelegram:    $('#showTelegram').checked,
+          showTelegramBot: $('#showTelegramBot').checked,
+          showAnnouncement: $('#showAnnouncement').checked,
+          showMemberButton: $('#showMemberButton').checked,
+        },
+        welcomeOffer: {
+          enabled:          $('#offerEnabled').checked,
+          eyebrow:          $('#offerEyebrow').value.trim(),
+          title:            $('#offerTitle').value.trim(),
+          primaryBonus:     $('#offerPrimary').value.trim(),
+          secondaryBonus:   $('#offerSecondary').value.trim(),
+          description:      $('#offerDescription').value.trim(),
+          code:             $('#offerCode').value.trim().toUpperCase() || 'KIBRIS',
+          buttonText:       $('#offerButton').value.trim(),
+          note:             $('#offerNote').value.trim(),
+        },
+        tournament: {
+          title:    $('#tTitle').value.trim(),
+          subtitle: $('#tSubtitle').value.trim(),
+          prize:    $('#tPrize').value.trim(),
+          endDate:  $('#tEnd').value.trim(),
+          status:   $('#tStatus').value.trim(),
+          intro:    $('#tIntro').value.trim(),
+          rules:    $('#tRules').value.split('\n').map(x => x.trim()).filter(Boolean),
+          prizes,
+        },
+        leaderboard: {
+          sheetUrl:       $('#sheetUrl').value.trim(),
+          title:          $('#lbTitle').value.trim(),
+          subtitle:       $('#lbSubtitle').value.trim(),
+          refreshSeconds: Math.max(10, Number($('#lbRefresh').value || 30)),
+          hideAffiliate: $('#hideAffiliate').checked,
+          maskUsernames: $('#maskUsernames').checked,
+        },
+        bonusCodesConfig: { enabled: $('#codesEnabled').checked, title: $('#codesTitle').value.trim(), subtitle: $('#codesSubtitle').value.trim(), maxCodes: 50, homeCount: Math.min(6, Math.max(1, Number($('#codesHomeCount').value || 3))) },
+        bonusCodes: (current.bonusCodes || []).slice(0, 50),
+        giveawaysConfig: { enabled: $('#giveawaysEnabled').checked, homeEnabled: $('#giveawaysHomeEnabled').checked, title: $('#giveawaysTitle').value.trim(), subtitle: $('#giveawaysSubtitle').value.trim() },
+        campaigns,
+        events,
+        faq,
+      };
+    }
+
+    function syncCampaignJson() { const el=$('#campaignsJson'); if(el) el.value=JSON.stringify(current.campaigns||[],null,2); }
+    function renderCampaignsAdmin() {
+      const list=$('#campaignsAdminList'); if(!list) return;
+      const items=current.campaigns||[]; syncCampaignJson();
+      if(!items.length){list.innerHTML='<div class="empty">Henüz öne çıkan fırsat yok. Yeni bir kart ekleyebilirsin.</div>';return;}
+      list.innerHTML=items.map((x,i)=>`<div class="admin-item-card"><div><strong>${escapeHtml(x.title||x.value||'İsimsiz fırsat')}</strong><small>${escapeHtml(x.badge||'Etiketsiz')} • Görsel: ${escapeHtml(x.imageUrl?'Özel URL':(x.visual||'otomatik'))} • ${x.framed===false?'Çerçevesiz':'Çerçeveli'} • ${x.active===false?'Pasif':'Aktif'}</small></div><div class="admin-item-actions"><button class="admin-mini-btn" data-campaign-edit="${i}">Düzenle</button><button class="admin-mini-btn" data-campaign-toggle="${i}">${x.active===false?'Aktif Yap':'Pasif Yap'}</button><button class="admin-mini-btn danger" data-campaign-delete="${i}">Tamamen Sil</button></div></div>`).join('');
+    }
+    function renderBonusCodes() {
+      const list = $('#codesAdminList'), items = current.bonusCodes || [];
+      $('#codesCount').textContent = items.length;
+      if (!items.length) { list.innerHTML = '<div class="empty">Henüz bonus kodu eklenmemiş.</div>'; return; }
+      list.innerHTML = items.map((x,i)=>`<div class="admin-item-card"><div><strong>${escapeHtml(x.code)} · ${escapeHtml(x.amount||x.title||'Bonus')}</strong><small>${escapeHtml(x.status||'Aktif')} • ${formatDate(x.createdAt)}</small></div><div class="admin-item-actions"><button class="admin-mini-btn" data-code-toggle="${escapeHtml(x.id)}">${x.status==='Tükendi'?'Aktif Yap':'Tükendi'}</button><button class="admin-mini-btn danger" data-code-delete="${escapeHtml(x.id)}">Sil</button></div></div>`).join('');
+    }
+    function renderGiveaways() {
+      const list = $('#giveawaysAdminList'), items = giveawayAdminItems || [];
+      $('#statGiveaways').textContent = items.length;
+      if (!items.length) { list.innerHTML = '<div class="empty">Henüz çekiliş eklenmemiş.</div>'; return; }
+      list.innerHTML = items.map(x => {
+        const expired = x.ends_at && new Date(x.ends_at).getTime() <= Date.now();
+        const winner = x.winner_username ? ` • Kazanan: ${escapeHtml(x.winner_username)}` : '';
+        return `<div class="admin-item-card"><div><strong>${escapeHtml(x.title)} · ${escapeHtml(x.prize || '')}</strong><small>${x.active===false?'Pasif':(expired?'Sona erdi':'Aktif')} • ${x.ends_at?formatDate(x.ends_at):'Bitiş tarihi yok'} • ${Number(x.participant_count||0)} katılımcı${winner}</small></div><div class="admin-item-actions"><button class="admin-mini-btn" data-give-participants="${escapeHtml(x.id)}">Katılımcılar</button><button class="admin-mini-btn" data-give-toggle="${escapeHtml(x.id)}">${x.active===false?'Aktif Yap':'Pasif Yap'}</button><button class="admin-mini-btn danger" data-give-delete="${escapeHtml(x.id)}">Sil</button></div></div>`;
+      }).join('');
+    }
+
+    async function loadGiveawayAdminSummary() {
+      const j = await api('/api/admin-giveaways');
+      giveawayAdminItems = Array.isArray(j.items) ? j.items : [];
+      giveawayAdminMeta = Object.fromEntries(giveawayAdminItems.map(x => [x.id, x]));
+      renderGiveaways();
+    }
+
+    async function showGiveawayParticipants(id) {
+      const panel = $('#giveawayParticipantsPanel');
+      panel.hidden = false;
+      panel.innerHTML = '<div class="raffle-participants-head"><b>Katılımcılar</b><span class="muted">Yükleniyor…</span></div>';
+      try {
+        const j = await api('/api/admin-giveaways?giveawayId=' + encodeURIComponent(id));
+        const item = giveawayAdminItems.find(x => String(x.id) === String(id));
+        const winner = j.winner ? `<span class="admin-status active">Kazanan: ${escapeHtml(j.winner.username)} • ${formatDate(j.winner.drawn_at)}</span>` : '<span class="muted">Kazanan henüz seçilmedi</span>';
+        panel.innerHTML = `<div class="raffle-participants-head"><div><b>${escapeHtml(item?.title||'Çekiliş')}</b><small class="muted" style="display:block">${j.count} katılımcı</small></div>${winner}</div><div class="raffle-participants-body"><table class="admin-table"><thead><tr><th>#</th><th>Portal Kullanıcısı</th><th>E-posta</th><th>Telegram</th><th>Katılım</th></tr></thead><tbody>${j.entries.length ? j.entries.map((u,i)=>`<tr class="${u.is_winner?'raffle-winner-row':''}"><td>${i+1}</td><td><b>${escapeHtml(u.username)}</b>${u.is_winner?' 🏆':''}</td><td>${escapeHtml(u.email)}</td><td><b>${escapeHtml(u.telegram)}</b></td><td>${formatDate(u.created_at)}</td></tr>`).join('') : '<tr><td colspan="5" class="muted">Henüz katılımcı yok.</td></tr>'}</tbody></table></div>`;
+      } catch (err) {
+        panel.innerHTML = `<div class="empty">${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    async function saveAll(message='Değişiklikler kaydedildi ve sitede yayında.') {
+      const data = collect();
+      const warnings = [...collectWarnings];
+      await api('/api/content', { method:'POST', body:JSON.stringify(data) });
+      current = data;
+      $('#statCodes').textContent = (current.bonusCodes || []).length;
+      toast(warnings.length ? `${message} ${warnings.join(' ')}` : message, true);
+    }
+
+    $('#addCampaign')?.addEventListener('click', async()=>{
+      const item={badge:$('#newCampaignBadge').value.trim(),title:$('#newCampaignTitle').value.trim(),value:$('#newCampaignValue').value.trim(),text:$('#newCampaignText').value.trim(),buttonText:$('#newCampaignButton').value.trim()||'Detayları İncele',href:normalizeUrl($('#newCampaignHref').value),visual:$('#newCampaignVisual').value||'casino',imageUrl:normalizeUrl($('#newCampaignImageUrl').value),framed:$('#newCampaignFramed').checked,active:true};
+      if(!item.title && !item.value && !item.text) return toast('En az bir başlık, değer veya açıklama gir.',false);
+      current.campaigns=[...(current.campaigns||[]),item]; renderCampaignsAdmin();
+      ['#newCampaignBadge','#newCampaignTitle','#newCampaignValue','#newCampaignText','#newCampaignButton','#newCampaignHref','#newCampaignImageUrl'].forEach(sel=>$(sel).value=''); $('#newCampaignVisual').value='casino'; $('#newCampaignFramed').checked=true;
+      try{await saveAll('Yeni fırsat yayınlandı.')}catch(e){toast(e.message,false)}
+    });
+    $('#campaignsAdminList')?.addEventListener('click',async e=>{
+      const del=e.target.closest('[data-campaign-delete]'),tog=e.target.closest('[data-campaign-toggle]'),edit=e.target.closest('[data-campaign-edit]');
+      if(edit){const i=Number(edit.dataset.campaignEdit),x=current.campaigns[i]; if(!x)return; const title=prompt('Başlık',x.title||''); if(title===null)return; const value=prompt('Büyük değer',x.value||''); if(value===null)return; const text=prompt('Açıklama',x.text||''); if(text===null)return; const badge=prompt('Etiket',x.badge||''); if(badge===null)return; const buttonText=prompt('Buton yazısı',x.buttonText||'Detayları İncele'); if(buttonText===null)return; const href=prompt('Link (boşsa kayıt linki)',x.href||''); if(href===null)return; const visualRaw=prompt('Hazır görsel tipi: casino / sport / live / cyprus',x.visual||'casino'); if(visualRaw===null)return; const visual=['casino','sport','live','cyprus'].includes(visualRaw.trim().toLowerCase())?visualRaw.trim().toLowerCase():'casino'; const imageUrl=prompt('Özel görsel URL (boş bırakırsan hazır görsel kullanılır)',x.imageUrl||''); if(imageUrl===null)return; const framed=confirm('Kart çerçeveli olsun mu? Tamam = Evet, İptal = Hayır'); current.campaigns[i]={...x,title,value,text,badge,buttonText,href:normalizeUrl(href),visual,imageUrl:normalizeUrl(imageUrl),framed};}
+      if(del) current.campaigns.splice(Number(del.dataset.campaignDelete),1);
+      if(tog){const x=current.campaigns[Number(tog.dataset.campaignToggle)]; if(x)x.active=x.active===false?true:false;}
+      if(del||tog||edit){renderCampaignsAdmin();try{await saveAll(del?'Fırsat ve çerçevesi tamamen silindi.':edit?'Fırsat güncellendi.':'Fırsat durumu güncellendi.')}catch(err){toast(err.message,false)}}
+    });
+
+    $('#addBonusCode').addEventListener('click', async()=>{ const code=$('#newCode').value.trim().toUpperCase(); if(!code) return toast('Bonus kodunu gir.',false); const item={id:'code_'+Date.now(),code,title:$('#newCodeTitle').value.trim()||'Bonus Kodu',amount:$('#newCodeAmount').value.trim(),limit:$('#newCodeLimit').value.trim()||'Sınırlı',status:$('#newCodeStatus').value,note:$('#newCodeNote').value.trim(),createdAt:new Date().toISOString(),active:true}; current.bonusCodes=[item,...(current.bonusCodes||[])].slice(0,50); renderBonusCodes(); try{await saveAll('Yeni bonus kodu yayınlandı.')}catch(e){toast(e.message,false)} $('#newCode').value=''; $('#newCodeNote').value=''; });
+    $('#codesAdminList').addEventListener('click',async e=>{const del=e.target.closest('[data-code-delete]'),tog=e.target.closest('[data-code-toggle]');if(del)current.bonusCodes=(current.bonusCodes||[]).filter(x=>x.id!==del.dataset.codeDelete);if(tog){const x=(current.bonusCodes||[]).find(x=>x.id===tog.dataset.codeToggle);if(x)x.status=x.status==='Tükendi'?'Aktif':'Tükendi'}if(del||tog){renderBonusCodes();try{await saveAll()}catch(err){toast(err.message,false)}}});
+
+    $('#addGiveaway').addEventListener('click', async () => {
+      const title = $('#newGiveTitle').value.trim();
+      const prize = $('#newGivePrize').value.trim();
+      const rawDate = $('#newGiveDate').value;
+      if (!title) return toast('Çekiliş başlığını gir.', false);
+      if (!prize) return toast('Ödülü gir.', false);
+      if (!rawDate) return toast('Bitiş tarihini seç.', false);
+      const end = new Date(rawDate);
+      if (!Number.isFinite(end.getTime()) || end.getTime() <= Date.now()) return toast('Bitiş tarihi gelecekte olmalı.', false);
+      const btn = $('#addGiveaway');
+      btn.disabled = true;
+      try {
+        await api('/api/admin-giveaways', { method:'POST', body:JSON.stringify({ title, prize, description:$('#newGiveDescription').value.trim(), endsAt:end.toISOString() }) });
+        $('#newGiveTitle').value=''; $('#newGivePrize').value=''; $('#newGiveDate').value=''; $('#newGiveDescription').value='';
+        await loadGiveawayAdminSummary();
+        toast('Yeni çekiliş yayınlandı.');
+      } catch (err) { toast(err.message, false); }
+      finally { btn.disabled = false; }
+    });
+
+    $('#giveawaysAdminList').addEventListener('click', async e => {
+      const parts = e.target.closest('[data-give-participants]');
+      const toggle = e.target.closest('[data-give-toggle]');
+      const del = e.target.closest('[data-give-delete]');
+      if (parts) return showGiveawayParticipants(parts.dataset.giveParticipants);
+      try {
+        if (toggle) await api('/api/admin-giveaways', { method:'PATCH', body:JSON.stringify({ id:toggle.dataset.giveToggle }) });
+        if (del) {
+          if (!confirm('Bu çekiliş ve tüm katılım kayıtları silinsin mi?')) return;
+          await api('/api/admin-giveaways?id=' + encodeURIComponent(del.dataset.giveDelete), { method:'DELETE' });
+          $('#giveawayParticipantsPanel').hidden = true;
+        }
+        if (toggle || del) await loadGiveawayAdminSummary();
+      } catch (err) { toast(err.message, false); }
+    });
+
+    $('#saveBtn').addEventListener('click', async () => {
+      const btn = $('#saveBtn');
+      const oldText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Kaydediliyor…';
+      try {
+        await saveAll();
+      } catch (err) {
+        toast(err.message, false);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = oldText;
+      }
+    });
+
+    $('#testSheet').addEventListener('click', async () => {
+      const u = $('#sheetUrl').value.trim();
+      if (!u) return $('#sheetResult').textContent = 'Önce Sheet URL gir.';
+      $('#sheetResult').textContent = 'Test ediliyor…';
+      try {
+        const r = await fetch('/api/leaderboard?url=' + encodeURIComponent(u));
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j.error);
+        $('#sheetResult').textContent = `Bağlantı başarılı: ${j.columns.length} kolon, ${j.rows.length} veri satırı bulundu.`;
+      } catch (err) {
+        $('#sheetResult').textContent = 'Hata: ' + err.message;
+      }
+    });
+
+    async function loadUsers() {
+      const body = $('#usersBody');
+      if (body) body.innerHTML = '<tr><td colspan="6" class="muted">Yükleniyor…</td></tr>';
+      try {
+        const j = await api('/api/admin-users');
+        $('#userCount').textContent = j.count || 0;
+        $('#statUsers').textContent = j.count || 0;
+        if (!body) return;
+        if (!j.users?.length) {
+          body.innerHTML = '<tr><td colspan="6" class="muted">Henüz portal üyesi yok.</td></tr>';
+          return;
+        }
+        body.innerHTML = j.users.map(u => `<tr>
+          <td>#${u.id}</td>
+          <td><b>${escapeHtml(u.username)}</b></td>
+          <td>${escapeHtml(u.email)}</td>
+          <td><span class="admin-status ${u.status === 'active' ? 'active' : ''}">${escapeHtml(u.status)}</span></td>
+          <td>${formatDate(u.created_at)}</td>
+          <td>${u.last_login_at ? formatDate(u.last_login_at) : '—'}</td>
+        </tr>`).join('');
+      } catch (err) {
+        if (body) body.innerHTML = `<tr><td colspan="6" class="error">${escapeHtml(err.message)}</td></tr>`;
+      }
+    }
+
+    function escapeHtml(v = '') {
+      return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+    }
+    function formatDate(v) {
+      try { return new Intl.DateTimeFormat('tr-TR', { dateStyle:'medium', timeStyle:'short' }).format(new Date(v)); }
+      catch { return String(v || '—'); }
+    }
+    $('#refreshUsers')?.addEventListener('click', loadUsers);
+
+    function switchTab(name) {
+      document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('active', x.dataset.tab === name));
+      document.querySelectorAll('[data-pane]').forEach(x => x.classList.toggle('active', x.dataset.pane === name));
+      if (name === 'users') loadUsers();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    document.querySelectorAll('[data-jump]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.jump)));
+
+    $('#logoutBtn').addEventListener('click', async () => {
+      await api('/api/logout', { method: 'POST' }).catch(() => {});
+      location.reload();
+    });
+
+    document.querySelectorAll('[data-tab]').forEach(b => {
+      b.addEventListener('click', () => switchTab(b.dataset.tab));
+    });
+
+    boot();
+  </script>
+
+</body>
+</html>

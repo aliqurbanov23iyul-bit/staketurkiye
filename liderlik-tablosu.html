@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080b0d">
+  <meta name="description" content="Stake Türkiye kampanya ve canlı liderlik portalı.">
+  <title>Liderlik Tablosu | Stake Türkiye</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="announce" data-announcement>Güncel kampanyalar • Canlı leaderboard • Kıbrıs kodu</div>
+
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <button class="hamburger-btn" id="sidebarToggleBtn" type="button" aria-label="Menüyü Aç">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <a class="v2-logo" href="index.html"><strong>STAKE</strong><small>TÜRKİYE 🇹🇷</small></a>
+
+      <div class="actions">
+        <a class="btn btn-ghost" data-login href="#">Giriş Yap</a>
+        <a class="btn btn-primary" data-referral href="#">Kayıt Ol</a>
+        <a class="btn btn-member" data-member-account href="hesap.html">Portal Hesabı</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="shell page-hero">
+      <div class="crumb"><a href="index.html">Ana Sayfa</a> / Liderlik Tablosu</div>
+      <span class="eyebrow">CANLI SIRALAMA</span>
+      <h1>Canlı <span class="accent">Liderlik Tablosu</span></h1>
+      <p data-lb-subtitle>Canlı sıralamayı ve ödülleri takip et.</p>
+    </section>
+
+    <section class="shell section" style="padding-top:20px">
+      <div class="panel" style="margin-bottom:14px;display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap">
+        <div>
+          <b data-lb-title>Canlı Liderlik Tablosu</b>
+          <div class="muted" style="font-size:12px;margin-top:5px">Son güncelleme: <span id="lbUpdated">—</span></div>
+        </div>
+        <span class="status">● LIVE</span>
+      </div>
+
+      <div id="leaderboardMount" class="table-wrap">
+        <div class="loading">Sıralama yükleniyor…</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer shell">
+    <div class="footer-top">
+      <div>
+        <a class="v2-logo" href="index.html"><strong>STAKE</strong><small>TÜRKİYE 🇹🇷</small></a>
+        <p data-affiliate-note>Bağımsız tanıtım / affiliate sayfasıdır.</p>
+
+        <!-- Footer Sosyal Butonlar -->
+        <div class="footer-social-wrap">
+          <a class="footer-social-btn tg-hover" data-telegram href="#" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+            </svg>
+            Telegram
+          </a>
+          <a class="footer-social-btn wa-hover" data-whatsapp href="#" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+            </svg>
+            WhatsApp
+          </a>
+          <a class="footer-social-btn bot-hover" data-telegram-bot href="#" target="_blank" rel="noopener noreferrer">
+            🤖 Telegram Bot
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="kampanyalar.html">Kampanyalar</a>
+                <a href="liderlik-tablosu.html">Liderlik</a>
+        <a href="sikca-sorulan-sorular.html">SSS</a>
+        <a href="iletisim.html">İletişim</a>
+      </div>
+    </div>
+
+    <div class="responsible">
+      <b>18+</b>
+      <span>Yalnızca yasal yaş sınırının üzerindeki kullanıcılar içindir. Sorumlu oyun ilkelerini gözetin. Kampanya şartları değişebilir.</span>
+    </div>
+    <p style="font-size:12px;margin-top:20px">© <span id="year"></span> Stake Türkiye Tanıtım</p>
+  </footer>
+
+  <script src="default-content.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let lbTimer;
+
+    const LEADER_PRIZES = ['150.000 TL','60.000 TL','50.000 TL','40.000 TL','28.000 TL','22.000 TL','20.000 TL','18.000 TL','17.000 TL','16.000 TL','15.000 TL','13.000 TL','11.000 TL','10.000 TL','10.000 TL'];
+    const norm = v => String(v||'').trim().toLocaleLowerCase('tr').replace(/[\s_-]+/g,'');
+    function pickIndex(cols, candidates){ return cols.findIndex(c => candidates.some(x => norm(c).includes(x))); }
+    function fmtWager(v) {
+      const raw = String(v ?? '').trim();
+      if (!raw) return '—';
+    
+      let s = raw
+        .replace(/\s+/g, '')
+        .replace(/TL/gi, '')
+        .replace(/₺/g, '')
+        .replace(/\$/g, '')
+        .replace(/[^0-9.,-]/g, '');
+    
+      if (!s) return '—';
+    
+      let n;
+    
+      // 17,785.26  -> 17785.26 (US)
+      if (/^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) {
+        n = Number(s.replace(/,/g, ''));
+      }
+      // 17.785,26 -> 17785.26 (TR)
+      else if (/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) {
+        n = Number(s.replace(/\./g, '').replace(',', '.'));
+      }
+      // 741,5 -> 741.5
+      else if (/^-?\d+,\d+$/.test(s)) {
+        n = Number(s.replace(',', '.'));
+      }
+      // 741.5 -> 741.5
+      else if (/^-?\d+\.\d+$/.test(s)) {
+        n = Number(s);
+      }
+      // 74150 -> 74150
+      else if (/^-?\d+$/.test(s)) {
+        n = Number(s);
+      }
+    
+      if (!Number.isFinite(n)) return raw;
+    
+      return new Intl.NumberFormat('tr-TR', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }).format(n) + ' TL';
+    }
+
+    async function drawLB(c) {
+      const mount = document.getElementById('leaderboardMount');
+      document.querySelector('[data-lb-title]').textContent = c.leaderboard.title || 'Canlı Liderlik Tablosu';
+      document.querySelector('[data-lb-subtitle]').textContent = 'Canlı sıralamayı, Wager değerlerini ve ödülleri takip et.';
+      if (!c.leaderboard.sheetUrl) { mount.innerHTML = '<div class="empty">Canlı sıralama kaynağı henüz eklenmemiş.</div>'; return; }
+      try {
+        const r = await fetch('/api/leaderboard?url=' + encodeURIComponent(c.leaderboard.sheetUrl)); const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error(j.error || 'Veri alınamadı');
+        if (!j.columns.length) { mount.innerHTML = '<div class="empty">Sıralama verisi bulunamadı.</div>'; return; }
+        const ri=pickIndex(j.columns,['rank','sıra','sira']);
+        const ui=pickIndex(j.columns,['username','kullanıcı','kullanici','user']);
+        const wi=pickIndex(j.columns,['wager','wagered','çevrim','cevrim','turnover','bahis']);
+        const rows = j.rows.slice(0,15).map((row,i)=>{
+          const rank = ri>=0 ? row.values[ri] : (i+1);
+          const user = ui>=0 ? row.values[ui] : (row.values[1] || row.values[0] || ('Oyuncu '+(i+1)));
+          const wager = wi>=0 ? row.values[wi] : '—';
+          return `<tr><td><span class="rank-pill ${String(rank)==='1'?'rank-1':''}">${esc(rank||i+1)}</span></td><td><b>${esc(user)}</b></td><td class="wager-cell">${esc(fmtWager(wager))}</td><td><strong class="leader-prize">🎁 ${LEADER_PRIZES[i]||'—'}</strong></td></tr>`;
+        }).join('');
+        mount.innerHTML = `<table class="leaderboard-clean"><thead><tr><th>#</th><th>Kullanıcı</th><th>Wager</th><th>Ödül</th></tr></thead><tbody>${rows}</tbody></table>`;
+        document.getElementById('lbUpdated').textContent = new Date(j.fetchedAt).toLocaleString('tr-TR');
+      } catch (err) { mount.innerHTML = `<div class="error">${esc(err.message)}</div>`; }
+    }
+
+    window.addEventListener('content-ready', e => {
+      const c = e.detail;
+      drawLB(c);
+      clearInterval(lbTimer);
+      lbTimer = setInterval(() => drawLB(c), Math.max(10, Number(c.leaderboard.refreshSeconds || 30)) * 1000);
+    });
+  </script>
+
+</body>
+</html>
